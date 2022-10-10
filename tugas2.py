@@ -56,7 +56,6 @@ def butbrightness():
             grayscale = int(grayscale)
             brightadjust = (grayscale + bright)
             datafotobrightness[x,y] = (brightadjust,brightadjust,brightadjust)
-            print(datafotobrightness[x,y])
             
         windowbrightness.destroy()
         
