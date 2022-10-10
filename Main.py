@@ -133,4 +133,4 @@ buttonrestart.grid(row = 7, column = 1, sticky=EW)
 window.mainloop()
 
 
-#test123
+#test lagi
