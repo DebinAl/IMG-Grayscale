@@ -1,12 +1,11 @@
 from tkinter import *
-from tkinter import ttk
 from tkinter import filedialog
 from PIL import ImageTk, Image
 
 def butopenfile():
     
     global openinput
-    window.filename = filedialog.askopenfilename(initialdir="/", filetypes=(("png files", "*.png"), ("jpg files", "*.jpg"), ("all files", "*.*")))
+    window.filename = filedialog.askopenfilename(initialdir="./", filetypes=(("Image Files", "*.png *.jpg *.jpeg"), ("All Files", "*.*")))
     alamatfile = window.filename
     
     if alamatfile:
@@ -87,7 +86,7 @@ window.geometry('+500+190') #window position
 window.resizable(0,0)
 
 """  Deklarasi Variabel  """
-ukuran = (150,250)
+ukuran = (300,450)
 imagedata = []
 dictfotoinput, dictfotograyscale, dictfotohasil = dict(), dict(), dict()
 
