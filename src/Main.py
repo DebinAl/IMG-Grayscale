@@ -16,7 +16,6 @@ def butopenfile():
 def butgrayscale():
 
     datafotograyscale = newfotograyscale.load()
-    datafotobrightness = newfotohasil.load()
     
     for xpos in range(openinput.width):
         for ypos in range(openinput.height):
@@ -30,15 +29,10 @@ def butgrayscale():
         grayscale = ((r+g+b)/3)
         grayscale = int(grayscale)
         datafotograyscale[x,y] = (grayscale,grayscale,grayscale)
-        datafotobrightness[x,y] = (grayscale,grayscale,grayscale)
         
     dictfotograyscale["image"] = ImageTk.PhotoImage(newfotograyscale)
     labelfotograyscale.configure(image=dictfotograyscale["image"])
     labelfotograyscale.image = dictfotograyscale["image"]
-    
-    dictfotohasil["image"] = ImageTk.PhotoImage(newfotohasil)
-    labelfotohasil.configure(image=dictfotohasil["image"])
-    labelfotohasil.image = dictfotohasil["image"]
 
 def butbrightness():
 
