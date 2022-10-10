@@ -131,3 +131,6 @@ buttonnegation.grid(row = 6, column = 1, sticky=EW)
 buttonrestart.grid(row = 7, column = 1, sticky=EW)
 
 window.mainloop()
+
+
+#test123
