@@ -11,8 +11,7 @@ def histogram():
     for data in imagedata:
         array_grayscale.append(data[2])
         
-    plt.hist(array_grayscale, bins=np.linspace(0,255,25))
-    plt.plot()
+    plt.hist(array_grayscale, bins=255)
     plt.show()
 """
 
