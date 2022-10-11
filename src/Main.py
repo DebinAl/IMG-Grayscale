@@ -2,7 +2,19 @@ from tkinter import *
 from tkinter import filedialog
 from tkinter import simpledialog
 from PIL import ImageTk, Image
-import time as t
+from matplotlib import pyplot as plt
+import numpy as np
+
+"""
+def histogram():
+    array_grayscale = []
+    for data in imagedata:
+        array_grayscale.append(data[2])
+        
+    plt.hist(array_grayscale, bins=np.linspace(0,255,25))
+    plt.plot()
+    plt.show()
+"""
 
 def openfile():
     
@@ -49,6 +61,18 @@ def adjust_brightness():
             
             datafotobrightness[x,y] = (newgray, newgray, newgray)
         
+    dictfotohasil["image"] = ImageTk.PhotoImage(newfotohasil)
+    labelfotohasil.configure(image=dictfotohasil["image"])
+    
+def negation():
+    datafotonegation = newfotohasil.load()
+    
+    for data in imagedata:
+        x,y,grayscale = data
+        negasi = 255 - grayscale
+        
+        datafotonegation[x,y] = (negasi, negasi, negasi)
+    
     dictfotohasil["image"] = ImageTk.PhotoImage(newfotohasil)
     labelfotohasil.configure(image=dictfotohasil["image"])
     
@@ -103,7 +127,7 @@ labelfotohasil.pack()
 buttoninput = Button(window, text="Open Files", command=openfile)
 buttongrayscale = Button(window, text="Grayscale", command=convert_grayscale)
 buttonbrightness = Button(window, text="Brightness Adjusment", command=adjust_brightness)
-buttonnegation = Button(window, text="Negation")
+buttonnegation = Button(window, text="Negation", command=negation)
 buttonrestart = Button(window, text="Reset", command=restart)
 
 framefotoinput.grid(row=1, column=1, sticky=EW)
