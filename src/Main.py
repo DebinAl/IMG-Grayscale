@@ -91,12 +91,12 @@ def restart():
 
 """  Start Tkinter Window  """
 window = Tk()
-window.geometry('+500+190') #window position
+window.geometry('+300+25') #window position
 window.resizable(0,0)
 window.title("Pointwise Grayscale")
 
 """  Deklarasi Variabel  """
-ukuran = (300,450)
+ukuran = (200,350)
 imagedata = []
 dictfotoinput, dictfotograyscale, dictfotohasil = dict(), dict(), dict()
 
@@ -127,16 +127,33 @@ buttoninput = Button(window, text="Open Files", command=openfile)
 buttongrayscale = Button(window, text="Grayscale", command=convert_grayscale)
 buttonbrightness = Button(window, text="Brightness Adjusment", command=adjust_brightness)
 buttonnegation = Button(window, text="Negation", command=negation)
+buttongamma = Button(window, text="Gamma Correction")
+buttoncontrast1 = Button(window, text="Contrast Stretching 1")
+buttoncontrast2 = Button(window, text="Contrast Stretching 2")
+buttonintensity1 = Button(window, text="Intensity Slicing 1")
+buttonintensity2 = Button(window, text="Intensity Slicing 2")
+buttonbitextract = Button(window, text="Bit Extraction")
+buttonRangecompress = Button(window, text="Range Compression")
+buttonekualisasihistogram = Button(window, text="Ekualisasi Histogram")
 buttonrestart = Button(window, text="Reset", command=restart)
+
 
 framefotoinput.grid(row=1, column=1, sticky=EW)
 framefotograyscale.grid(row=1, column=2, sticky=EW)
-framefotohasil.grid(row=1, column=3, sticky=EW)
+framefotohasil.grid(row=2, column=2, rowspan=14, sticky=EW)
 
-buttoninput.grid(row = 3, column = 1, sticky=EW)
-buttongrayscale.grid(row = 4, column = 1, sticky=EW)
-buttonbrightness.grid(row = 5, column = 1, sticky=EW)
-buttonnegation.grid(row = 6, column = 1, sticky=EW)
-buttonrestart.grid(row = 7, column = 1, sticky=EW)
+buttoninput.grid(row = 2, column = 1, sticky=EW)
+buttongrayscale.grid(row = 3, column = 1, sticky=EW)
+buttonbrightness.grid(row = 4, column = 1, sticky=EW)
+buttonnegation.grid(row = 5, column = 1, sticky=EW)
+buttongamma.grid(row = 6, column = 1, sticky=EW)
+buttoncontrast1.grid(row = 7, column = 1, sticky=EW)
+buttoncontrast2.grid(row = 8, column = 1, sticky=EW)
+buttonintensity1.grid(row = 9, column = 1, sticky=EW)
+buttonintensity2.grid(row = 10, column = 1, sticky=EW)
+buttonbitextract.grid(row = 11, column = 1, sticky=EW)
+buttonRangecompress.grid(row = 12, column = 1, sticky=EW)
+buttonekualisasihistogram.grid(row = 13, column = 1, sticky=EW)
+buttonrestart.grid(row = 14, column = 1, sticky=EW)
 
 window.mainloop()
