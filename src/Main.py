@@ -51,16 +51,20 @@ def convert_grayscale():
 
 def adjust_brightness():
     datafotobrightness = newfotohasil.load()
-    value = simpledialog.askinteger(title= "Brightness Value", prompt= "Value") 
+    value = simpledialog.askinteger(title= "Brightness Value", prompt= "Value")
     
-    if value:
+    if (value == 0):
+        dictfotohasil["image"] = ImageTk.PhotoImage(newfotograyscale)
+    
+    elif value:
         for data in imagedata:
             x,y,grayscale = data
             newgray = grayscale + value
             
             datafotobrightness[x,y] = (newgray, newgray, newgray)
         
-    dictfotohasil["image"] = ImageTk.PhotoImage(newfotohasil)
+        dictfotohasil["image"] = ImageTk.PhotoImage(newfotohasil)
+        
     labelfotohasil.configure(image=dictfotohasil["image"])
     
 def negation():
