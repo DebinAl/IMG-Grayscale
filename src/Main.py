@@ -1,12 +1,8 @@
-from cProfile import label
-from hashlib import new
 from tkinter import *
 from tkinter import filedialog
 from tkinter import simpledialog
-from turtle import color
 from PIL import ImageTk, Image
 from matplotlib import pyplot as plt
-import numpy as np
 import os
 
 
@@ -18,16 +14,21 @@ def create_histogray():
     for data in imagedata:
         array_grayscale.append(data[2])
     
-    plt.hist(array_grayscale, bins=255)
+    plt.xlim([0, 255])
+    plt.hist(array_grayscale, bins=64)
     plt.savefig(histograypath) #save path
     plt.clf()
     
 def create_histohasil():
     array_hasil = []   
     for data in hasildata:
-        array_hasil.append(data[2]) 
+        if data > 255:
+            data = 255
+            
+        array_hasil.append(data) 
 
-    plt.hist(array_hasil, bins=255)
+    plt.xlim([0, 255])
+    plt.hist(array_hasil, bins=64, color= "orange")
     plt.savefig(histohasilpath) #save path
     plt.clf()
     
@@ -83,14 +84,18 @@ def adjust_brightness():
         for data in imagedata:
             x,y,grayscale = data
             newgray = grayscale + value
-            hasildata.append([x,y,newgray])
+            hasildata.append(newgray)
             
             datafotobrightness[x,y] = (newgray, newgray, newgray)
     
-    create_histogray()
-        
     dictfotohasil["image"] = ImageTk.PhotoImage(newfotohasil)    
     labelfotohasil.configure(image=dictfotohasil["image"])
+    
+    create_histohasil()
+    
+    hasilhisto = Image.open(histohasilpath).resize(ukuranhisto)
+    dicthasilhisto["image"] = ImageTk.PhotoImage(hasilhisto)
+    labelhasilhisto.configure(image=dicthasilhisto["image"])
     
 def negation():
     datafotonegation = newfotohasil.load()
@@ -98,14 +103,18 @@ def negation():
     for data in imagedata:
         x,y,grayscale = data
         negasi = 255 - grayscale
-        hasildata.append([x,y,negasi])        
+        hasildata.append(negasi)        
         
         datafotonegation[x,y] = (negasi, negasi, negasi)
     
-    create_histogray()
-    
     dictfotohasil["image"] = ImageTk.PhotoImage(newfotohasil)
     labelfotohasil.configure(image=dictfotohasil["image"])
+    
+    create_histohasil()
+    
+    hasilhisto = Image.open(histohasilpath).resize(ukuranhisto)
+    dicthasilhisto["image"] = ImageTk.PhotoImage(hasilhisto)
+    labelhasilhisto.configure(image=dicthasilhisto["image"])
     
 def restart():
     
@@ -128,8 +137,9 @@ def restart():
 """ CLOSE PROTOCOL """  
 def closeprotcol():
 
-    if os.path.exists(histograypath) == True: 
+    if os.path.exists(histograypath) == True and os.path.exists(histohasilpath): 
         os.remove(histograypath)
+        os.remove(histohasilpath)
         plt.close('all')
         window.destroy()
     else:
