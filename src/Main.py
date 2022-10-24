@@ -1,20 +1,34 @@
+from cProfile import label
 from tkinter import *
 from tkinter import filedialog
 from tkinter import simpledialog
 from PIL import ImageTk, Image
 from matplotlib import pyplot as plt
 import numpy as np
+import os
 
-"""
-def histogram():
+
+histograypath = "src/temp/grayscale.png"
+histohasilpath = "src/temp/hasil.png"
+
+def create_histogray():
     array_grayscale = []
     for data in imagedata:
         array_grayscale.append(data[2])
-        
+    
     plt.hist(array_grayscale, bins=255)
-    plt.show()
-"""
+    plt.savefig(histograypath) #save path
+    plt.clf()
+    
+def create_histohasil():
+    array_hasil = []   
+    for data in hasildata:
+        array_hasil.append(data[2]) 
 
+    plt.hist(array_hasil, bins=255)
+    plt.savefig(histohasilpath) #save path
+    plt.clf()
+    
 def openfile():
     
     global openinput
@@ -48,23 +62,32 @@ def convert_grayscale():
 
     dictfotograyscale["image"] = ImageTk.PhotoImage(newfotograyscale)
     labelfotograyscale.configure(image=dictfotograyscale["image"])
+    
+    create_histogray()
+    
+    grayhisto = Image.open(histograypath).resize(ukuranhisto)
+    dictgrayhisto["image"] = ImageTk.PhotoImage(grayhisto)
+    labelgrayhisto.configure(image=dictgrayhisto["image"])
+    
 
 def adjust_brightness():
     datafotobrightness = newfotohasil.load()
     value = simpledialog.askinteger(title= "Brightness Value", prompt= "Value")
+    hasildata.clear()
     
     if (value == 0):
         dictfotohasil["image"] = ImageTk.PhotoImage(newfotograyscale)
-    
     elif value:
         for data in imagedata:
             x,y,grayscale = data
             newgray = grayscale + value
+            hasildata.append([x,y,newgray])
             
             datafotobrightness[x,y] = (newgray, newgray, newgray)
+    
+    create_histogray()
         
-        dictfotohasil["image"] = ImageTk.PhotoImage(newfotohasil)
-        
+    dictfotohasil["image"] = ImageTk.PhotoImage(newfotohasil)    
     labelfotohasil.configure(image=dictfotohasil["image"])
     
 def negation():
@@ -73,8 +96,11 @@ def negation():
     for data in imagedata:
         x,y,grayscale = data
         negasi = 255 - grayscale
+        hasildata.append([x,y,negasi])        
         
         datafotonegation[x,y] = (negasi, negasi, negasi)
+    
+    create_histogray()
     
     dictfotohasil["image"] = ImageTk.PhotoImage(newfotohasil)
     labelfotohasil.configure(image=dictfotohasil["image"])
@@ -92,6 +118,21 @@ def restart():
     newfotohasil = Image.new("RGB", ukuran)
     dictfotohasil['image'] = ImageTk.PhotoImage(newfotohasil)
     labelfotohasil.configure(image = dictfotohasil["image"])
+    
+    newgrayhisto = Image.new("RGB", ukuranhisto)
+    dictgrayhisto["image"] = ImageTk.PhotoImage(newgrayhisto)
+    labelgrayhisto.configure(image = dictgrayhisto["image"])
+
+""" CLOSE PROTOCOL """  
+def closeprotcol():
+
+    if os.path.exists(histograypath) == True: 
+        os.remove(histograypath)
+        plt.close('all')
+        window.destroy()
+    else:
+        plt.close('all') #harus diisi soalnya powershellnya jadi ga jalan karna matplotlibnya masih jalan di background (harus di close)
+        window.destroy()
 
 """  Start Tkinter Window  """
 window = Tk()
@@ -101,13 +142,17 @@ window.title("Pointwise Grayscale")
 
 """  Deklarasi Variabel  """
 ukuran = (300,450)
+ukuranhisto = (450,450)
 imagedata = []
-dictfotoinput, dictfotograyscale, dictfotohasil = dict(), dict(), dict()
+hasildata = []
+dictfotoinput, dictfotograyscale, dictfotohasil, dictgrayhisto, dicthasilhisto = dict(), dict(), dict(), dict(), dict()
 
 """  Deklarasi Frame  """
 framefotoinput = Frame(window)
 framefotograyscale = Frame(window)
 framefotohasil = Frame(window)
+framehistogray = Frame(window)
+framehistohasil = Frame(window)
 
 """  Deklarasi Image Kosong  """
 newfotoinput = Image.new("RGB", ukuran)
@@ -122,9 +167,18 @@ newfotohasil = Image.new("RGB", ukuran)
 dictfotohasil['image'] = ImageTk.PhotoImage(newfotohasil)
 labelfotohasil = Label(framefotohasil, image=dictfotohasil['image'])
 
+newgrayhisto = Image.new("RGB", ukuranhisto)
+dictgrayhisto['image'] = ImageTk.PhotoImage(newgrayhisto)
+labelgrayhisto = Label(framehistogray, image=dictgrayhisto['image'])
+
+newhasilhisto = Image.new("RGB", ukuranhisto)
+dicthasilhisto['image'] = ImageTk.PhotoImage(newhasilhisto)
+labelhasilhisto = Label(framehistohasil, image=dictgrayhisto['image'])
+
 labelfotoinput.pack()
 labelfotograyscale.pack()
 labelfotohasil.pack()
+labelgrayhisto.pack()
 
 """  Button  """
 buttoninput = Button(window, text="Open Files", command=openfile)
@@ -135,12 +189,16 @@ buttonrestart = Button(window, text="Reset", command=restart)
 
 framefotoinput.grid(row=1, column=1, sticky=EW)
 framefotograyscale.grid(row=1, column=2, sticky=EW)
-framefotohasil.grid(row=1, column=3, sticky=EW)
+framefotohasil.grid(row=2, column=2, rowspan=10, sticky=EW)
+framehistogray.grid(row=1, column=3, sticky=EW)
+framehistohasil.grid(row=2, column=3, sticky=EW)
 
-buttoninput.grid(row = 3, column = 1, sticky=EW)
-buttongrayscale.grid(row = 4, column = 1, sticky=EW)
-buttonbrightness.grid(row = 5, column = 1, sticky=EW)
-buttonnegation.grid(row = 6, column = 1, sticky=EW)
-buttonrestart.grid(row = 7, column = 1, sticky=EW)
+buttoninput.grid(row = 2, column = 1, sticky=EW)
+buttongrayscale.grid(row = 3, column = 1, sticky=EW)
+buttonbrightness.grid(row = 4, column = 1, sticky=EW)
+buttonnegation.grid(row = 5, column = 1, sticky=EW)
+buttonrestart.grid(row = 6, column = 1, sticky=EW)
 
+""" AKTIVASI PROTOCOL"""
+window.protocol("WM_DELETE_WINDOW", closeprotcol)
 window.mainloop()
