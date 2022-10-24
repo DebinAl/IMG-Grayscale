@@ -45,7 +45,7 @@ def convert_grayscale():
         imagedata[i] = x,y,grayscale
         
         datafotograyscale[x,y] = (grayscale,grayscale,grayscale)
-
+    
     dictfotograyscale["image"] = ImageTk.PhotoImage(newfotograyscale)
     labelfotograyscale.configure(image=dictfotograyscale["image"])
 
