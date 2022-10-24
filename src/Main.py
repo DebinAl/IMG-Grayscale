@@ -1,7 +1,9 @@
 from cProfile import label
+from hashlib import new
 from tkinter import *
 from tkinter import filedialog
 from tkinter import simpledialog
+from turtle import color
 from PIL import ImageTk, Image
 from matplotlib import pyplot as plt
 import numpy as np
@@ -59,7 +61,7 @@ def convert_grayscale():
         imagedata[i] = x,y,grayscale
         
         datafotograyscale[x,y] = (grayscale,grayscale,grayscale)
-    
+
     dictfotograyscale["image"] = ImageTk.PhotoImage(newfotograyscale)
     labelfotograyscale.configure(image=dictfotograyscale["image"])
     
@@ -136,13 +138,13 @@ def closeprotcol():
 
 """  Start Tkinter Window  """
 window = Tk()
-window.geometry('+300+25') #window position
+window.geometry('+500+190') #window position
 window.resizable(0,0)
 window.title("Pointwise Grayscale")
 
 """  Deklarasi Variabel  """
-ukuran = (300,450)
-ukuranhisto = (450,450)
+ukuran = (250,400)
+ukuranhisto = (400,400)
 imagedata = []
 hasildata = []
 dictfotoinput, dictfotograyscale, dictfotohasil, dictgrayhisto, dicthasilhisto = dict(), dict(), dict(), dict(), dict()
@@ -153,6 +155,7 @@ framefotograyscale = Frame(window)
 framefotohasil = Frame(window)
 framehistogray = Frame(window)
 framehistohasil = Frame(window)
+framebutton = Frame(window, width=250)
 
 """  Deklarasi Image Kosong  """
 newfotoinput = Image.new("RGB", ukuran)
@@ -173,40 +176,33 @@ labelgrayhisto = Label(framehistogray, image=dictgrayhisto['image'])
 
 newhasilhisto = Image.new("RGB", ukuranhisto)
 dicthasilhisto['image'] = ImageTk.PhotoImage(newhasilhisto)
-labelhasilhisto = Label(framehistohasil, image=dictgrayhisto['image'])
+labelhasilhisto = Label(framehistohasil, image=dicthasilhisto['image'])
 
 labelfotoinput.pack()
 labelfotograyscale.pack()
 labelfotohasil.pack()
 labelgrayhisto.pack()
+labelhasilhisto.pack()
 
 """  Button  """
-buttoninput = Button(window, text="Open Files", command=openfile)
-buttongrayscale = Button(window, text="Grayscale", command=convert_grayscale)
-buttonbrightness = Button(window, text="Brightness Adjusment", command=adjust_brightness)
-buttonnegation = Button(window, text="Negation", command=negation)
-buttongamma = Button(window, text="Gamma Correction")
-buttoncontrast1 = Button(window, text="Contrast Stretching 1")
-buttoncontrast2 = Button(window, text="Contrast Stretching 2")
-buttonintensity1 = Button(window, text="Intensity Slicing 1")
-buttonintensity2 = Button(window, text="Intensity Slicing 2")
-buttonbitextract = Button(window, text="Bit Extraction")
-buttonRangecompress = Button(window, text="Range Compression")
-buttonekualisasihistogram = Button(window, text="Ekualisasi Histogram")
-buttonrestart = Button(window, text="Reset", command=restart)
-
+buttoninput = Button(framebutton, text="Open Files", command=openfile)
+buttongrayscale = Button(framebutton, text="Grayscale", command=convert_grayscale)
+buttonbrightness = Button(framebutton, text="Brightness Adjusment", command=adjust_brightness)
+buttonnegation = Button(framebutton, text="Negation", command=negation)
+buttonrestart = Button(framebutton, text="Reset", command=restart)
 
 framefotoinput.grid(row=1, column=1, sticky=EW)
 framefotograyscale.grid(row=1, column=2, sticky=EW)
-framefotohasil.grid(row=2, column=2, rowspan=10, sticky=EW)
+framefotohasil.grid(row=2, column=2, rowspan=6, sticky=EW)
 framehistogray.grid(row=1, column=3, sticky=EW)
-framehistohasil.grid(row=2, column=3, sticky=EW)
+framehistohasil.grid(row=2, column=3, rowspan=6, sticky=EW)
+framebutton.grid(row=2, column=1, sticky=NSEW)
 
-buttoninput.grid(row = 2, column = 1, sticky=EW)
-buttongrayscale.grid(row = 3, column = 1, sticky=EW)
-buttonbrightness.grid(row = 4, column = 1, sticky=EW)
-buttonnegation.grid(row = 5, column = 1, sticky=EW)
-buttonrestart.grid(row = 6, column = 1, sticky=EW)
+buttoninput.grid(row = 1, column = 1, columnspan= 2,sticky=EW)
+buttongrayscale.grid(row = 2, column = 1, columnspan= 2, ipadx=97 ,sticky=EW)
+buttonbrightness.grid(row = 3, column = 1, columnspan= 2 ,sticky=EW)
+buttonnegation.grid(row = 4, column = 1, columnspan= 2 ,sticky=EW)
+buttonrestart.grid(row = 5, column = 1, columnspan= 2 ,sticky=EW)
 
 """ AKTIVASI PROTOCOL"""
 window.protocol("WM_DELETE_WINDOW", closeprotcol)
