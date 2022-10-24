@@ -20,7 +20,7 @@ def create_histogray():
     plt.clf()
     
 def create_histohasil():
-    array_hasil = []   
+    array_hasil = []
     for data in hasildata:
         if data > 255:
             data = 255
@@ -28,12 +28,11 @@ def create_histohasil():
         array_hasil.append(data) 
 
     plt.xlim([0, 255])
-    plt.hist(array_hasil, bins=64, color= "orange")
+    plt.hist(array_hasil, bins=64, color= "darkorange")
     plt.savefig(histohasilpath) #save path
     plt.clf()
     
 def openfile():
-    
     global openinput
     window.filename = filedialog.askopenfilename(initialdir="../test", filetypes=(("Image Files", "*.png *.jpg *.jpeg"), ("All Files", "*.*")))
     alamatfile = window.filename
@@ -80,6 +79,9 @@ def adjust_brightness():
     
     if (value == 0):
         dictfotohasil["image"] = ImageTk.PhotoImage(newfotograyscale)
+        for data in imagedata:
+            hasildata.append(data[2])
+            
     elif value:
         for data in imagedata:
             x,y,grayscale = data
@@ -87,8 +89,9 @@ def adjust_brightness():
             hasildata.append(newgray)
             
             datafotobrightness[x,y] = (newgray, newgray, newgray)
+        
+        dictfotohasil["image"] = ImageTk.PhotoImage(newfotohasil)    
     
-    dictfotohasil["image"] = ImageTk.PhotoImage(newfotohasil)    
     labelfotohasil.configure(image=dictfotohasil["image"])
     
     create_histohasil()
@@ -99,6 +102,7 @@ def adjust_brightness():
     
 def negation():
     datafotonegation = newfotohasil.load()
+    hasildata.clear()
     
     for data in imagedata:
         x,y,grayscale = data
@@ -117,7 +121,6 @@ def negation():
     labelhasilhisto.configure(image=dicthasilhisto["image"])
     
 def restart():
-    
     newfotoinput = Image.new("RGB", ukuran)
     dictfotoinput["image"] = ImageTk.PhotoImage(newfotoinput)
     labelfotoinput.configure(image = dictfotoinput["image"])
@@ -136,7 +139,6 @@ def restart():
 
 """ CLOSE PROTOCOL """  
 def closeprotcol():
-
     if os.path.exists(histograypath) == True and os.path.exists(histohasilpath): 
         os.remove(histograypath)
         os.remove(histohasilpath)
